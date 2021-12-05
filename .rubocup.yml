@@ -13,3 +13,7 @@ AllCops:
     - 'lib/tasks/*'
     - 'vendor/**/*'
     - 'path/ruby'
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Documentation:
+  Enabled: false
