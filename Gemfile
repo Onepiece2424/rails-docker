@@ -43,6 +43,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails'
   gem 'rubocop-airbnb'
+  gem 'rspec_junit_formatter'
 end
 
 group :development do
