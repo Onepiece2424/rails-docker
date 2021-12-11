@@ -9,7 +9,7 @@ jobs:
     - image: circleci/mysql:5.7
       environment:
         - MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
-        - MYSQL_ROOT_PASSWORD: password
+        # - MYSQL_ROOT_PASSWORD: password
         - MYSQL_ROOT_HOST: '127.0.0.1'
 
     working_directory: ~/rails-docker
@@ -96,8 +96,8 @@ jobs:
         - RAILS_ENV: 'test'
     - image: circleci/mysql:5.7
       environment:
-    #     - MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
-        - MYSQL_ROOT_PASSWORD: password
+        # - MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+        # - MYSQL_ROOT_PASSWORD: password
     #     - MYSQL_ROOT_HOST: '127.0.0.1'
         # - MYSQL_USER: mysql
         # - MYSQL_DB: db
