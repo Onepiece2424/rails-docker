@@ -7,3 +7,8 @@ Style/FrozenStringLiteralComment:
 AllCops:
   Exclude:
     - 'config/**/*'
+    - 'vendor/**/*'
+    - "bin/*"
+
+inherit_gem:
+  rubocop-discourse: default.yml
