@@ -13,7 +13,6 @@ jobs:
 
     working_directory: ~/rails-docker
 
-
     steps:
     - checkout
 
