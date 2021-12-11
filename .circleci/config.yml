@@ -125,6 +125,11 @@ jobs:
           command: bundle exec rspec
 
   deploy:
+  docker:
+    - image: circleci/ruby:2.7.0-node-browsers
+      environment:
+        - BUNDLER_VERSION: 2.2.32
+        - RAILS_ENV: 'test'
     working_directory: ~/rails-docker
     - run:
       name: Deploy Master to Heroku
