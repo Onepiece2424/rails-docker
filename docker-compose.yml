@@ -17,5 +17,6 @@ services:
       - db-volume:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
-volumes:
-  db-volume:
+  volumes:
+    db-volume:
+      - ./tmp/db:/var/lib/mysql/data
