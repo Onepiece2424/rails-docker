@@ -92,7 +92,7 @@
 version: 2.1
 jobs:
   rspec:
-    working_directory: ~/potepanec
+    working_directory: ~/rails-docker
     docker:
       - image: circleci/ruby
     steps:
@@ -111,15 +111,15 @@ jobs:
       - run:
           name: Setup database
           command: |
-            docker-compose exec potepanec bash -c 'yes n | bundle exec rails g spree:install --migrate --seed --sample --auto_accept'
+            docker-compose exec web bash -c 'yes n | bundle exec rails g spree:install --migrate --seed --sample --auto_accept'
       - run:
           name: Run rspec
-          command: docker-compose exec potepanec rspec
+          command: docker-compose exec web rspec
 
   rubocop:
     working_directory: ~/potepanec
     docker:
-      - image: circleci/ruby:2.7.3
+      - image: circleci/ruby:2.7.0
     steps:
       - checkout
       - restore_cache:
@@ -140,7 +140,7 @@ jobs:
             - vendor/bundle
 
   heroku_deploy:
-    working_directory: ~/potepanec
+    working_directory: ~/rails-docker
     docker:
       - image: sue445/heroku-cli
     steps:
