@@ -139,7 +139,7 @@ workflows:
       - build
       - rubocop
       - rspec
-      - deploy
+      - deploy:
         requires:
           - rspec
           - rubocop
