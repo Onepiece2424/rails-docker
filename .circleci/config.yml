@@ -97,6 +97,8 @@ jobs:
       environment:
         - MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
         - MYSQL_ROOT_HOST: '127.0.0.1'
+        - MYSQL_USER: mysql
+        - MYSQL_DB: app_test
 
       working_directory: ~/rails-docker
 
