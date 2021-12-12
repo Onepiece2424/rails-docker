@@ -112,7 +112,8 @@ jobs:
   heroku_deploy:
     working_directory: ~/rails-docker
     docker:
-      - image: sue445/heroku-cli
+      # - image: sue445/heroku-cli
+      - image: circleci/ruby:2.7.0-node-browsers
     steps:
       - checkout
       - run:
