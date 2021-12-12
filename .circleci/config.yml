@@ -124,37 +124,87 @@ jobs:
   #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
   #         fi
 
+  # deploy:
+  #   # machine:
+  #   #   enabled: true
+  #   working_directory: ~/rails-docker
+  #   # environment:
+  #     # HEROKU_APP: "sleepy-refuge-55486" # define env var $HEROKU_APP
+  #   steps:
+  #     - checkout
+  #     # - run:
+  #     #     name: Setup Heroku
+  #     #     command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
+
+  #     # - run:
+  #     #     command: |
+  #     #       git push heroku task:master
+  #     #       heroku run rake db:migrate
+  #     #       sleep 5 # sleep for 5 seconds to wait for dynos
+  #     #       heroku restart
+
+  #     - run:
+  #         name: Delete old apps if needed
+  #         command: for app_name in $APP_NAMES_TO_REMOVE; do heroku apps:destroy -a $app_name -c $app_name; done
+  #     - run:
+  #         name: Define Heroku app name to create
+  #         command: timestamp=`date +%Y%m%d%H%M%S` && echo "export HEROKU_APP_NAME=potepanec-$timestamp" >> $BASH_ENV
+  #     # - run:
+  #     #     name: Create fresh Heroku app
+  #     #     command: heroku apps:create $HEROKU_APP_NAME --addons=jawsdb:kitefin
+  #     - run:
+  #         name: Deploy
+  #         command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:master
+
+# deploy_stage:
+#     docker:
+#       - image: circleci/ruby:2.7.0-node-browsers
+#     working_directory: /tmp/rails-docker
+#     steps:
+#       - checkout
+#       - run:
+#           name: 'Install Heroku CLI, if necessary'
+#           command: |
+#             if [[ $(command -v heroku) == "" ]]; then
+#               curl https://cli-assets.heroku.com/install.sh | sh
+#             else
+#               echo "Heroku is already installed. No operation was performed."
+#             fi
+#       - run:
+#           name: heroku maintenance on
+#           command: heroku maintenance:on --app ${HEROKU_APP_NAME_STAGE}
+#       - run:
+#           name: Deploy to Heroku_Staging
+#           command: |
+#             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_STAGE.git master
+#       - run:
+#           name: heroku maintenance off
+#           command: heroku maintenance:on --app ${HEROKU_APP_NAME_STAGE}
+
   deploy:
-    machine:
-      enabled: true
-    working_directory: ~/rails-docker
-    # environment:
-      # HEROKU_APP: "sleepy-refuge-55486" # define env var $HEROKU_APP
+    docker:
+      - image: circleci/ruby:2.7.0-node-browsers
+    working_directory: /tmp/rails-docker
     steps:
       - checkout
-      # - run:
-      #     name: Setup Heroku
-      #     command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
-
-      # - run:
-      #     command: |
-      #       git push heroku task:master
-      #       heroku run rake db:migrate
-      #       sleep 5 # sleep for 5 seconds to wait for dynos
-      #       heroku restart
-
       - run:
-          name: Delete old apps if needed
-          command: for app_name in $APP_NAMES_TO_REMOVE; do heroku apps:destroy -a $app_name -c $app_name; done
+          name: 'Install Heroku CLI, if necessary'
+          command: |
+            if [[ $(command -v heroku) == "" ]]; then
+              curl https://cli-assets.heroku.com/install.sh | sh
+            else
+              echo "Heroku is already installed. No operation was performed."
+            fi
       - run:
-          name: Define Heroku app name to create
-          command: timestamp=`date +%Y%m%d%H%M%S` && echo "export HEROKU_APP_NAME=potepanec-$timestamp" >> $BASH_ENV
-      # - run:
-      #     name: Create fresh Heroku app
-      #     command: heroku apps:create $HEROKU_APP_NAME --addons=jawsdb:kitefin
+          name: heroku maintenance on
+          command: heroku maintenance:on --app ${HEROKU_APP_NAME}
       - run:
-          name: Deploy
-          command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:master
+          name: Deploy to Heroku_Production
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+      - run:
+          name: heroku maintenance off
+          command: heroku maintenance:off --app ${HEROKU_APP_NAME}
 
 workflows:
   version: 2
