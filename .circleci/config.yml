@@ -184,6 +184,9 @@ jobs:
   deploy:
     docker:
       - image: circleci/ruby:2.7.0-node-browsers
+        environment:
+          - BUNDLER_VERSION: 2.2.32
+          - RAILS_ENV: "test"
       - image: sue445/heroku-cli
     working_directory: /tmp/rails-docker
     steps:
