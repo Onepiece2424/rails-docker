@@ -208,6 +208,9 @@ jobs:
     #       command: heroku maintenance:off --app ${HEROKU_APP_NAME}
 
   deploy:
+    docker:
+      - image: circleci/ruby:2.7.0-node-browsers
+      - image: sue445/heroku-cli
     working_directory: /tmp/rails-docker
     steps:
       - checkout
