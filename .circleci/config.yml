@@ -84,6 +84,7 @@ jobs:
             - vendor/bundle
 
   rspec:
+    working_directory: ~/rails-docker
     docker:
       - image: circleci/ruby:2.7.0-node-browsers
         environment:
@@ -92,7 +93,6 @@ jobs:
       - image: circleci/mysql:5.7
         environment:
           - MYSQL_ROOT_PASSWORD: password
-        working_directory: ~/rails-docker
     steps:
       - checkout
       - restore_cache:
