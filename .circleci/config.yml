@@ -127,7 +127,7 @@ jobs:
   deploy:
     machine:
         enabled: true
-    working_directory: ~/circleci-demo-workflows
+    working_directory: ~/rails-docker
     environment:
       HEROKU_APP: "sleepy-refuge-55486" # define env var $HEROKU_APP
     steps:
@@ -138,7 +138,7 @@ jobs:
 
       - run:
           command: |
-            git push heroku sequential-branch-filter:master
+            git push heroku task:master
             heroku run rake db:migrate
             sleep 5 # sleep for 5 seconds to wait for dynos
             heroku restart
