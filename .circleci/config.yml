@@ -125,17 +125,18 @@ jobs:
           command: bundle exec rspec
 
   deploy:
+    working_directory: ~/rails-docker
     docker:
-      - image: circleci/ruby:2.7.0-node-browsers
-        environment:
-          - BUNDLER_VERSION: 2.2.32
-          - RAILS_ENV: 'test'
-      - image: circleci/mysql:5.7
-        environment:
-          - MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
-          # - MYSQL_ROOT_PASSWORD: password
-          - MYSQL_ROOT_HOST: '127.0.0.1'
-      working_directory: ~/rails-docker
+      - image: sue445/heroku-cli
+      # - image: circleci/ruby:2.7.0-node-browsers
+      #   environment:
+      #     - BUNDLER_VERSION: 2.2.32
+      #     - RAILS_ENV: 'test'
+      # - image: circleci/mysql:5.7
+      #   environment:
+      #     - MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      #     # - MYSQL_ROOT_PASSWORD: password
+      #     - MYSQL_ROOT_HOST: '127.0.0.1'
     steps:
       - checkout
       - run:
