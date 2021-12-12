@@ -130,7 +130,6 @@ workflows:
       - build
       - rubocop
       - rspec:
-      # - heroku_deploy:
-          # requires:
-          #   - rspec
-          #   - rubocop
+          requires:
+            - rspec
+            - rubocop
