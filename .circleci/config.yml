@@ -124,7 +124,7 @@ jobs:
           name: Rspec
           command: bundle exec rspec
 
-  deploy:
+  heroku_deploy:
     working_directory: ~/rails-docker
     docker:
       - image: sue445/heroku-cli
@@ -153,7 +153,7 @@ workflows:
       - build
       - rubocop
       - rspec
-      - deploy:
+      - heroku_deploy:
           requires:
             - rspec
             - rubocop
