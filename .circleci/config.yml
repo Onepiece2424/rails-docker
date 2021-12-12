@@ -110,7 +110,7 @@ jobs:
           name: Rspec
           command: bundle exec rspec
 
-  # heroku_deploy:
+  # deploy:
   #   working_directory: ~/rails-docker
   #   docker:
   #     # - image: sue445/heroku-cli
@@ -124,14 +124,34 @@ jobs:
   #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
   #         fi
 
+  deploy:
+    machine:
+        enabled: true
+    working_directory: ~/circleci-demo-workflows
+    environment:
+      HEROKU_APP: "sleepy-refuge-55486" # define env var $HEROKU_APP
+    steps:
+      - checkout
+      - run:
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
+
+      - run:
+          command: |
+            git push heroku sequential-branch-filter:master
+            heroku run rake db:migrate
+            sleep 5 # sleep for 5 seconds to wait for dynos
+            heroku restart
+
+
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
       - rubocop
-      - rspec:
-      # - heroku_deploy:
+      - rspec
+      - deploy:
           requires:
-            # - rspec
+            - rspec
             - rubocop
