@@ -110,19 +110,19 @@ jobs:
           name: Rspec
           command: bundle exec rspec
 
-  # deploy:
-  #   working_directory: ~/rails-docker
-  #   docker:
-  #     # - image: sue445/heroku-cli
-  #     - image: circleci/ruby:2.7.0-node-browsers
-  #   steps:
-  #     - checkout
-  #     - run:
-  #       name: Deploy Master to Heroku
-  #       command: |
-  #         if [ "${CIRCLE_BRANCH}" == "master" ]; then
-  #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-  #         fi
+  deploy:
+    working_directory: ~/rails-docker
+    # docker:
+      # - image: sue445/heroku-cli
+      # - image: circleci/ruby:2.7.0-node-browsers
+    steps:
+      - checkout
+      - run:
+        name: Deploy Master to Heroku
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+          fi
 
   # deploy:
   #   # machine:
@@ -224,14 +224,14 @@ jobs:
   #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
   #         fi
 
-  deploy: #デプロイするジョブ
-    working_directory: ~/rails-docker
-    docker:
-    - image: ruby:2.7.0
-    steps:
-      - checkout
-      - run: bundle install --path vendor/bundle
-      - run: bundle exec rake deploy
+  # deploy: #デプロイするジョブ
+    # working_directory: ~/rails-docker
+    # docker:
+    # - image: ruby:2.7.0
+    # steps:
+    #   - checkout
+    #   - run: bundle install --path vendor/bundle
+    #   - run: bundle exec rake deploy
 
 workflows:
   version: 2
