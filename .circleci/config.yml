@@ -156,59 +156,59 @@ jobs:
   #         name: Deploy
   #         command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:master
 
-  deploy_stage:
-    docker:
-      - image: circleci/ruby:2.7.0-node-browsers
-    working_directory: /tmp/rails-docker
-    steps:
-      - checkout
-      - run:
-          name: 'Install Heroku CLI, if necessary'
-          command: |
-            if [[ $(command -v heroku) == "" ]]; then
-              curl https://cli-assets.heroku.com/install.sh | sh
-            else
-              echo "Heroku is already installed. No operation was performed."
-            fi
-      - run:
-          name: heroku maintenance on
-          command: heroku maintenance:on --app ${HEROKU_APP_NAME_STAGE}
-      - run:
-          name: Deploy to Heroku_Staging
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_STAGE.git master
-      - run:
-          name: heroku maintenance off
-          command: heroku maintenance:on --app ${HEROKU_APP_NAME_STAGE}
+  # deploy_stage:
+  #   docker:
+  #     - image: circleci/ruby:2.7.0-node-browsers
+  #   working_directory: /tmp/rails-docker
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: 'Install Heroku CLI, if necessary'
+  #         command: |
+  #           if [[ $(command -v heroku) == "" ]]; then
+  #             curl https://cli-assets.heroku.com/install.sh | sh
+  #           else
+  #             echo "Heroku is already installed. No operation was performed."
+  #           fi
+  #     - run:
+  #         name: heroku maintenance on
+  #         command: heroku maintenance:on --app ${HEROKU_APP_NAME_STAGE}
+  #     - run:
+  #         name: Deploy to Heroku_Staging
+  #         command: |
+  #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_STAGE.git master
+  #     - run:
+  #         name: heroku maintenance off
+  #         command: heroku maintenance:on --app ${HEROKU_APP_NAME_STAGE}
 
-  deploy:
-    docker:
-      - image: circleci/ruby:2.7.0-node-browsers
-        environment:
-          - BUNDLER_VERSION: 2.2.32
-          - RAILS_ENV: "test"
-      - image: sue445/heroku-cli
-    working_directory: /tmp/rails-docker
-    steps:
-      - checkout
-      - run:
-          name: 'Install Heroku CLI, if necessary'
-          command: |
-            if [[ $(command -v heroku) == "" ]]; then
-              curl https://cli-assets.heroku.com/install.sh | sh
-            else
-              echo "Heroku is already installed. No operation was performed."
-            fi
-      - run:
-          name: heroku maintenance on
-          command: heroku maintenance:on --app ${HEROKU_APP_NAME}
-      - run:
-          name: Deploy to Heroku_Production
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-      - run:
-          name: heroku maintenance off
-          command: heroku maintenance:off --app ${HEROKU_APP_NAME}
+  # deploy:
+  #   docker:
+  #     - image: circleci/ruby:2.7.0-node-browsers
+  #       environment:
+  #         - BUNDLER_VERSION: 2.2.32
+  #         - RAILS_ENV: "test"
+  #     - image: sue445/heroku-cli
+  #   working_directory: /tmp/rails-docker
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: 'Install Heroku CLI, if necessary'
+  #         command: |
+  #           if [[ $(command -v heroku) == "" ]]; then
+  #             curl https://cli-assets.heroku.com/install.sh | sh
+  #           else
+  #             echo "Heroku is already installed. No operation was performed."
+  #           fi
+  #     - run:
+  #         name: heroku maintenance on
+  #         command: heroku maintenance:on --app ${HEROKU_APP_NAME}
+  #     - run:
+  #         name: Deploy to Heroku_Production
+  #         command: |
+  #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+  #     - run:
+  #         name: heroku maintenance off
+  #         command: heroku maintenance:off --app ${HEROKU_APP_NAME}
 
   # deploy:
   #   docker:
@@ -224,6 +224,15 @@ jobs:
   #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
   #         fi
 
+  deploy: #デプロイするジョブ
+    working_directory: ~/rails-docker
+    docker:
+    - image: ruby:2.7.0
+    steps:
+      - checkout
+      - run: bundle install --path vendor/bundle
+      - run: bundle exec rake deploy
+
 workflows:
   version: 2
   build_and_test:
@@ -231,7 +240,7 @@ workflows:
       - build
       - rubocop
       - rspec
-      - deploy_stage
+      # - deploy_stage
       - deploy:
           requires:
             - rspec
