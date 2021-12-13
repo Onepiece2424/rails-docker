@@ -69,3 +69,4 @@ gem 'jquery-rails'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'rubocop-discourse'
 gem 'therubyracer'
+gem 'libv8'
