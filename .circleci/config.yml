@@ -110,19 +110,19 @@ jobs:
           name: Rspec
           command: bundle exec rspec
 
-  deploy:
-    working_directory: ~/rails-docker
-    docker:
-      - image: sue445/heroku-cli
-      # - image: circleci/ruby:2.7.0-node-browsers
-    steps:
-      - checkout
-      - run:
-        name: Deploy Master to Heroku
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-          fi
+  # deploy:
+  #   working_directory: ~/rails-docker
+  #   docker:
+  #     - image: sue445/heroku-cli
+  #     # - image: circleci/ruby:2.7.0-node-browsers
+  #   steps:
+  #     - checkout
+  #     - run:
+  #       name: Deploy Master to Heroku
+  #       command: |
+  #         if [ "${CIRCLE_BRANCH}" == "master" ]; then
+  #           git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+  #         fi
 
   # deploy:
   #   # machine:
@@ -239,9 +239,9 @@ workflows:
     jobs:
       - build
       - rubocop
-      - rspec
+      - rspec:
       # - deploy_stage
-      - deploy:
+      # - deploy:
           requires:
             - rspec
             - rubocop
