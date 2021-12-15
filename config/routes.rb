@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'posts/index'
   resources :users
+  resources :posts
   resources :tasks
 end
