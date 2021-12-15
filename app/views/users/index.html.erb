@@ -25,8 +25,8 @@
         <td><%= user.email %></td>
         <td><%= user.age %></td>
         <td><%= user.introduction %></td>
-        <td><%= user.updated_at %></td>
-        <td><%= user.created_at %></td>
+        <td><%= user.updated_at.to_s(:datetime_jp) %></td>
+        <td><%= user.created_at.to_s(:datetime_jp) %></td>
       </tr>
     <% end %>
   </tbody>
