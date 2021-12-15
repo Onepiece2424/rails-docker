@@ -239,9 +239,7 @@ workflows:
     jobs:
       - build
       - rubocop
-      - rspec:
-      # - deploy_stage
-      # - deploy:
-          requires:
-            - rspec
-            - rubocop
+      - rspec
+          # requires:
+          #   - rspec
+          #   - rubocop
