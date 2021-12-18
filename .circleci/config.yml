@@ -64,7 +64,8 @@ jobs:
       - run:  bash .circleci/setup-heroku.sh
       - add_ssh_keys:
           fingerprints:
-          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDD3EiNTCIhtGGoasef3rssomU8OyuwL209VQnPEjGSenfZrrBTbyjoA9Y8yL5Etp7umVZhos5I3kwzbLHJh+kkvVHyyUVlTUbURVploUhJZc9diyX7nzxJ+bOeE3dK79M8Z/IRY7yo1L4YmZBkleuokH/jgnuunwRqWOpcra8+Ns+7RzmZKDUgkHwCJIUglsF+bXv6yFkVO1WnIaDtqk1+9+B9yA5f0vgspql/OjkN8Vj4LHlMnLdJw0CaVW0MUG08pcWZcb3NfXTuu3+yJnvmWsBHFtba8JtW8nXnkosBq+S5hzC43zyZpNkc2ecq7BsU8+9vTCr9ji07FP45KWRTlzU4iq5C8NaCKrhc2h5sEhH37W+GFK94tSDW1CW5cDH6tQues1PGMrobITKOXKvgHynw33gW95+DCkjvYOPmnbULLEB6RFQM2UFRiQ2HkzmsFxq2QkdwuT4I1MMJLxm6Exr7qfKtApEkdMw3Zb8hz4NNAxOqBpIGJP5t5x58A/U= naganorioto@naganorioninnoMacBook-Air.local"
+          - "SHA256:nhJnj6GzGe0Juvuo9xhq09FL6jQ99MhBwFugZ+cpuEA root@bb926a3d0bda"
+
       - deploy:
           name: heroku deploy
           command: |
