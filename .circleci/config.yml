@@ -233,6 +233,41 @@ jobs:
     #   - run: bundle install --path vendor/bundle
     #   - run: bundle exec rake deploy
 
+deploy:
+    docker:
+        - image: circleci/ruby:2.7.0-node-browsers
+          environment:
+            - BUNDLER_VERSION: 2.2.32
+            - RAILS_ENV: "test"
+        - image: circleci/mysql:5.7
+          environment:
+            - MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+            - MYSQL_ROOT_HOST: "127.0.0.1"
+
+    working_directory: ~/rails-docker
+    steps:
+      - checkout
+      - run:
+          name: Build docker image
+          command: docker build --rm=false -t registry.heroku.com/${HEROKU_APP_NAME}/web .
+      - run:
+          name: Setup Heroku command
+          command: bash .circleci/setup_heroku.sh
+      - run:
+          name: Execute Heroku maintenance on
+          command: heroku maintenance:on --app ${HEROKU_APP_NAME}
+      - run:
+          name: Push container to registry.heroku.com
+          command: |
+            docker login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
+            docker push registry.heroku.com/${HEROKU_APP_NAME}/web
+      - run:
+          name: Execute Heroku db migrate
+          command: heroku run rails db:migrate --app ${HEROKU_APP_NAME}
+      - run:
+          name: Execut Heroku maintenance off
+          command: heroku maintenance:off --app ${HEROKU_APP_NAME}
+
 workflows:
   version: 2
   build_and_test:
