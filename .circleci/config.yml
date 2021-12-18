@@ -60,7 +60,7 @@ jobs:
           path: /tmp/test-results
           destination: test-results
 
-      - run:  wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+      # - run:  wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
       - run:  bash .circleci/setup-heroku.sh
       - add_ssh_keys:
           fingerprints:
