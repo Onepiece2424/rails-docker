@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  deploy:
     docker:
       - image: circleci/ruby:2.7.0-node-browsers
         environment:
@@ -59,6 +59,19 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+
+      - run:  wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+      - run:  bash .circleci/setup-heroku.sh
+      - add_ssh_keys:
+          fingerprints:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDD3EiNTCIhtGGoasef3rssomU8OyuwL209VQnPEjGSenfZrrBTbyjoA9Y8yL5Etp7umVZhos5I3kwzbLHJh+kkvVHyyUVlTUbURVploUhJZc9diyX7nzxJ+bOeE3dK79M8Z/IRY7yo1L4YmZBkleuokH/jgnuunwRqWOpcra8+Ns+7RzmZKDUgkHwCJIUglsF+bXv6yFkVO1WnIaDtqk1+9+B9yA5f0vgspql/OjkN8Vj4LHlMnLdJw0CaVW0MUG08pcWZcb3NfXTuu3+yJnvmWsBHFtba8JtW8nXnkosBq+S5hzC43zyZpNkc2ecq7BsU8+9vTCr9ji07FP45KWRTlzU4iq5C8NaCKrhc2h5sEhH37W+GFK94tSDW1CW5cDH6tQues1PGMrobITKOXKvgHynw33gW95+DCkjvYOPmnbULLEB6RFQM2UFRiQ2HkzmsFxq2QkdwuT4I1MMJLxm6Exr7qfKtApEkdMw3Zb8hz4NNAxOqBpIGJP5t5x58A/U= naganorioto@naganorioninnoMacBook-Air.local"
+      - deploy:
+          name: heroku deploy
+          command: |
+              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                  git push heroku master
+              fi
+
 
   rubocop:
     working_directory: ~/rails-docker
@@ -233,46 +246,46 @@ jobs:
     #   - run: bundle install --path vendor/bundle
     #   - run: bundle exec rake deploy
 
-deploy:
-    docker:
-        - image: circleci/ruby:2.7.0-node-browsers
-          environment:
-            - BUNDLER_VERSION: 2.2.32
-            - RAILS_ENV: "test"
-        - image: circleci/mysql:5.7
-          environment:
-            - MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-            - MYSQL_ROOT_HOST: "127.0.0.1"
+# deploy:
+#     docker:
+#         - image: circleci/ruby:2.7.0-node-browsers
+#           environment:
+#             - BUNDLER_VERSION: 2.2.32
+#             - RAILS_ENV: "test"
+#         - image: circleci/mysql:5.7
+#           environment:
+#             - MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+#             - MYSQL_ROOT_HOST: "127.0.0.1"
 
-    working_directory: ~/rails-docker
-    steps:
-      - checkout
-      - run:
-          name: Build docker image
-          command: docker build --rm=false -t registry.heroku.com/${HEROKU_APP_NAME}/web .
-      - run:
-          name: Setup Heroku command
-          command: bash .circleci/setup_heroku.sh
-      - run:
-          name: Execute Heroku maintenance on
-          command: heroku maintenance:on --app ${HEROKU_APP_NAME}
-      - run:
-          name: Push container to registry.heroku.com
-          command: |
-            docker login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
-            docker push registry.heroku.com/${HEROKU_APP_NAME}/web
-      - run:
-          name: Execute Heroku db migrate
-          command: heroku run rails db:migrate --app ${HEROKU_APP_NAME}
-      - run:
-          name: Execut Heroku maintenance off
-          command: heroku maintenance:off --app ${HEROKU_APP_NAME}
+#     working_directory: ~/rails-docker
+#     steps:
+#       - checkout
+#       - run:
+#           name: Build docker image
+#           command: docker build --rm=false -t registry.heroku.com/${HEROKU_APP_NAME}/web .
+#       - run:
+#           name: Setup Heroku command
+#           command: bash .circleci/setup_heroku.sh
+#       - run:
+#           name: Execute Heroku maintenance on
+#           command: heroku maintenance:on --app ${HEROKU_APP_NAME}
+#       - run:
+#           name: Push container to registry.heroku.com
+#           command: |
+#             docker login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
+#             docker push registry.heroku.com/${HEROKU_APP_NAME}/web
+#       - run:
+#           name: Execute Heroku db migrate
+#           command: heroku run rails db:migrate --app ${HEROKU_APP_NAME}
+#       - run:
+#           name: Execut Heroku maintenance off
+#           command: heroku maintenance:off --app ${HEROKU_APP_NAME}
 
 workflows:
   version: 2
-  build_and_test:
+  deploy_and_test:
     jobs:
-      - build
+      - deploy
       - rubocop
       - rspec
           # requires:
