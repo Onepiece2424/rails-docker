@@ -1,0 +1,14 @@
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - 'config/**/*'
+    - 'vendor/**/*'
+    - "bin/*"
+
+inherit_gem:
+  rubocop-discourse: default.yml
