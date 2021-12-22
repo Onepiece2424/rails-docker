@@ -49,8 +49,8 @@ test:
 #
 production:
   <<: *default
-  # database: app_production
-  database: db
+  database: app_production
+  # database: db
   username: app
   password: <%= ENV['APP_DATABASE_PASSWORD'] %>
   # adapter: mysql
