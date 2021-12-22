@@ -14,8 +14,7 @@ services:
   db:
     image: mysql:5.7
     volumes:
-      # - db-volume:/var/lib/mysql
-      - ./tmp/db:/var/lib/mysql/data
+      - db-volume:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
 volumes:
